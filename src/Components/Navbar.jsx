@@ -1,13 +1,51 @@
 import { useState } from "react";
-import { Link, NavLink } from "react-router"; // Correct import
+import { Link, NavLink, useNavigate } from "react-router"; // Correct import
 import { FaBars, FaTimes } from "react-icons/fa";
-// import { useAuth } from "../hooks/useAuth"; // Uncomment when ready
+import { useAuth } from "../Provider/AuthProvider";
+import Swal from "sweetalert2";
+
 // import ThemeToggle from "./ThemeToggle"; // Uncomment when ready
 
 const Navbar = () => {
-  // const { user, logout } = useAuth(); // Uncomment when using auth
+  const { user, logOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You will be logged out of your account",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logOut()
+          .then(() => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Logged Out',
+              text: 'You have been successfully logged out',
+              timer: 1500,
+              showConfirmButton: false
+            });
+            navigate('/');
+          })
+          .catch(error => {
+            console.error(error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to log out. Please try again.'
+            });
+          });
+      }
+    });
+  };
+
 
   return (
     <nav className="bg-gradient-to-r from-[#457B9D] to-[#3d6fb5]  text-white shadow-lg">
@@ -41,7 +79,7 @@ const Navbar = () => {
           {/* ThemeToggle placeholder */}
           {/* <ThemeToggle /> */}
 
-          {!false /* replace with !user when using auth */ ? (
+          {!user ? (
             <Link
               to="/login"
               className="bg-gradient-to-r from-[#FF6B35] to-[#F77F00] w-[90px] h-10 flex items-center justify-center rounded-full hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
@@ -52,11 +90,11 @@ const Navbar = () => {
             <div className="relative">
               {/* Profile Picture */}
               <img
-                src="/assets/placeholder.png" // replace with user.photoURL
-                alt="User" // replace with user.displayName
+                src={user.photoURL} 
+                alt={user.displayName} 
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                title="User" // replace with user.displayName
+                title={user.displayName}
               />
 
               {/* Dropdown */}
@@ -84,8 +122,8 @@ const Navbar = () => {
                     Joined Events
                   </Link>
                   <button
-                    // onClick={logout} // uncomment when using auth
-                    className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
+                    onClick={handleLogout} 
+                    className="cursor-pointer w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
                   >
                     Logout
                   </button>
@@ -121,7 +159,7 @@ const Navbar = () => {
             Upcoming Events
           </NavLink>
 
-          {!false /* replace with !user when using auth */ ? (
+          {!user  ? (
             <Link
               to="/login"
               className="block bg-gradient-to-r from-[#FF6B35] to-[#F77F00] px-4 py-2 rounded hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
@@ -153,7 +191,7 @@ const Navbar = () => {
                 Joined Events
               </Link>
               <button
-                // onClick={logout} // uncomment when using auth
+                onClick={logout} 
                 className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
               >
                 Logout

@@ -1,12 +1,13 @@
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  GithubAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile
+  updateProfile,
 } from 'firebase/auth';
 import React, { useEffect, useMemo, useState, useContext } from 'react';
 import { auth } from '../../Firebase/Firebase.config';
@@ -38,7 +39,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  // Login
+  // Login (email/password)
   const login = async (email, password) => {
     setLoading(true);
     try {
@@ -50,30 +51,13 @@ const AuthProvider = ({ children }) => {
   };
 
   // Logout
-  const logout = async () => {
+const logOut = () => {
     setLoading(true);
-    try {
-      // Toast first
-      await Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Logout successful',
-        showConfirmButton: false,
-        timer: 1500,
-        toast: true,
-        background: '#FF6B35',
-        color: '#FFFFFF',
-        iconColor: '#F77F00',
-        customClass: {
-          popup: 'rounded-xl shadow-md text-sm font-medium',
-        },
-      });
-
-      await signOut(auth);
-    } finally {
-      setLoading(false);
-    }
+    // Remove token from localStorage
+    // localStorage.removeItem('bookHavenToken');
+    return signOut(auth);
   };
+
 
   // Reset password
   const resetPassword = async (email) => {
@@ -86,12 +70,28 @@ const AuthProvider = ({ children }) => {
   };
 
   // Google sign in
-  const googleSignIn = async () => {
+ const googleSignIn=async()=>{
+         setLoading(true);
+         const provider = new GoogleAuthProvider();
+try{
+    const result = await signInWithPopup(auth, provider);
+      return result;
+}finally{
+     setLoading(false);
+}
+
+        }
+
+  // GitHub sign in
+  const githubSignIn = async () => {
     setLoading(true);
-    const provider = new GoogleAuthProvider();
+    const provider = new GithubAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
       return result;
+    } catch (error) {
+      console.error("GitHub Sign-In Error:", error.code, error.message);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -117,9 +117,10 @@ const AuthProvider = ({ children }) => {
       loading,
       createUser,
       login,
-      logout,
+      logOut,
       resetPassword,
       googleSignIn,
+      githubSignIn, // added
       updateUserProfile,
     }),
     [user, loading]
