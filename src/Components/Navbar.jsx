@@ -11,7 +11,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
+console.log(user)
 const handleLogout = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -191,7 +191,7 @@ const handleLogout = () => {
                 Joined Events
               </Link>
               <button
-                onClick={logout} 
+                onClick={handleLogout} 
                 className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
               >
                 Logout
