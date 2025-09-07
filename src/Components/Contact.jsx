@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { FaArrowLeft, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
+import { FaArrowLeft, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaUser } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { useTheme } from '../Provider/ThemeContext';
 
@@ -28,15 +28,19 @@ const Contact = () => {
       Swal.fire({
         icon: 'success',
         title: 'Message Sent!',
-        text: 'Thank you for contacting us. We will get back to you soon.',
+        text: 'Thank you for contacting me. I will get back to you soon.',
         confirmButtonColor: '#f97316'
       });
       setFormData({ name: '', email: '', subject: '', message: '' });
     }, 1500);
   };
 
+  const cardClass = isDarkMode 
+    ? 'bg-gray-800/80 backdrop-blur-md border border-gray-700 shadow-lg' 
+    : 'bg-white/70 backdrop-blur-md border border-orange-200 shadow-xl';
+
   return (
-    <div className={`min-h-screen px-4 py-10 ${isDarkMode ? 'bg-gray-900 text-gray-200' : ' bg-slate-50  text-gray-900'}`}>
+    <div className={`min-h-screen px-4 py-10 ${isDarkMode ? 'bg-gray-900 text-gray-200' : 'bg-slate-50 text-gray-900'}`}>
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <Link 
@@ -50,57 +54,67 @@ const Contact = () => {
         </Link>
 
         {/* Header */}
-        <div className={`mb-10 text-center`}>
-          <h1 className="text-4xl font-bold mb-2">Contact Me</h1>
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-extrabold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-500">
+            Contact Me
+          </h1>
           <p className={`text-lg ${isDarkMode ? 'text-gray-400' : 'text-gray-700'}`}>
-            I'd love to hear from you. Fill out the form below and I’ll get back to you soon.
+            I’d love to hear from you! Fill out the form below and I’ll respond as soon as possible.
           </p>
         </div>
 
         {/* Contact Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Contact Form */}
-          <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-2xl`}>
-            <h2 className="text-2xl font-semibold mb-6">Send a Message</h2>
-            <form onSubmit={handleSubmit}>
-              {['name', 'email', 'subject'].map((field) => (
-                <div className="mb-4" key={field}>
-                  <label className="block mb-2 font-medium capitalize">{field.replace('-', ' ')}</label>
+          <div className={`${cardClass} p-8 rounded-3xl`}>
+            <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-orange-400 to-amber-500 text-transparent bg-clip-text">
+              Send a Message
+            </h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {['name', 'email', 'subject'].map((field, idx) => (
+                <div className="relative" key={idx}>
                   <input
                     type={field === 'email' ? 'email' : 'text'}
                     name={field}
                     value={formData[field]}
                     onChange={handleChange}
                     required
-                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none transition-colors duration-200 ${
-                      isDarkMode
-                        ? 'bg-gray-700 border-gray-600 text-white focus:border-orange-400 focus:ring-orange-300'
+                    className={`peer w-full px-4 pt-6 pb-2 rounded-xl border focus:outline-none transition-all duration-200 ${
+                      isDarkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white focus:border-orange-400 focus:ring-orange-300' 
                         : 'border-gray-300 focus:border-orange-500 focus:ring-orange-200'
                     }`}
+                    placeholder=" "
                   />
+                  <label className={`absolute left-4 top-2 text-gray-400 text-sm transition-all duration-200 peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base`}>
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
                 </div>
               ))}
 
-              <div className="mb-6">
-                <label className="block mb-2 font-medium">Message</label>
+              <div className="relative">
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   rows="5"
                   required
-                  className={`w-full px-4 py-2 rounded-lg border focus:outline-none transition-colors duration-200 ${
-                    isDarkMode
-                      ? 'bg-gray-700 border-gray-600 text-white focus:border-orange-400 focus:ring-orange-300'
+                  className={`peer w-full px-4 pt-6 pb-2 rounded-xl border focus:outline-none transition-all duration-200 ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-gray-600 text-white focus:border-orange-400 focus:ring-orange-300' 
                       : 'border-gray-300 focus:border-orange-500 focus:ring-orange-200'
                   }`}
+                  placeholder=" "
                 />
+                <label className={`absolute left-4 top-2 text-gray-400 text-sm transition-all duration-200 peer-placeholder-shown:top-6 peer-placeholder-shown:text-gray-500 peer-placeholder-shown:text-base`}>
+                  Message
+                </label>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center transition-transform duration-200 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'}`}
+                className={`w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold py-3 rounded-xl flex items-center justify-center transition-transform duration-200 ${loading ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'}`}
               >
                 {loading ? (
                   <div className="flex items-center">
@@ -119,58 +133,41 @@ const Contact = () => {
 
           {/* Contact Info */}
           <div className="space-y-6">
-            <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-2xl`}>
-              <h2 className="text-2xl font-semibold mb-6">Contact Information</h2>
+            <div className={`${cardClass} p-8 rounded-3xl`}>
+              <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-orange-400 to-amber-500 text-transparent bg-clip-text">
+                Contact Information
+              </h2>
 
               <div className="space-y-5">
-                <div className="flex items-start">
-                  <div className="bg-orange-500 p-3 rounded-lg text-white mr-4">
-                    <FaEnvelope />
+                {[
+                  { icon: <FaEnvelope />, title: 'Email', value: 'shaking235@gmail.com' },
+                  { icon: <FaPhone />, title: 'Phone', value: '+88018136064**' },
+                  { icon: <FaMapMarkerAlt />, title: 'Address', value: 'Nimtala High School, Bandar, Chattogram' },
+                  { icon: <FaUser />, title: 'Name', value: 'Shakib Hossain' },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start gap-4 group">
+                    <div className="bg-orange-500 p-3 rounded-lg text-white flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-lg">{item.title}</h3>
+                      <p className="text-orange-600 font-semibold">{item.value}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium text-lg">Email</h3>
-                    <p className="text-orange-600 font-semibold">shaking235@gmail.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-orange-500 p-3 rounded-lg text-white mr-4">
-                    <FaPhone />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg">Phone</h3>
-                    <p>+88018136064**</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-orange-500 p-3 rounded-lg text-white mr-4">
-                    <FaMapMarkerAlt />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg">Address</h3>
-                    <p>Nimtala High School, Bandar, Chattogram, Bangladesh</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-orange-500 p-3 rounded-lg text-white mr-4">
-                    <FaMapMarkerAlt />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg">Name</h3>
-                    <p>Shakib Hossain</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-2xl`}>
-              <h2 className="text-2xl font-semibold mb-4">FAQ & Support</h2>
-              <p className="mb-4">Check our FAQ section for quick answers to common questions.</p>
+            <div className={`${cardClass} p-8 rounded-3xl`}>
+              <h2 className="text-3xl font-semibold mb-4 bg-gradient-to-r from-orange-400 to-amber-500 text-transparent bg-clip-text">
+                FAQ & Support
+              </h2>
+              <p className="mb-4 text-gray-500">
+                Check our FAQ section for quick answers to common questions.
+              </p>
               <Link 
                 to="/faq" 
-                className="inline-block px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-lg"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold rounded-xl transition-transform duration-200 hover:scale-105"
               >
                 View FAQ
               </Link>
@@ -180,9 +177,11 @@ const Contact = () => {
 
         {/* Map */}
         <div className="mt-12">
-          <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-2xl`}>
-            <h2 className="text-2xl font-semibold mb-6">Find Me Here</h2>
-            <div className="w-full h-80 rounded-lg overflow-hidden">
+          <div className={`${cardClass} p-8 rounded-3xl`}>
+            <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-orange-400 to-amber-500 text-transparent bg-clip-text">
+              Find Me Here
+            </h2>
+            <div className="w-full h-80 rounded-xl overflow-hidden shadow-lg">
               <iframe
                 title="Shakib Location"
                 className="w-full h-full border-0"
@@ -191,7 +190,6 @@ const Contact = () => {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>
-            
             </div>
           </div>
         </div>
