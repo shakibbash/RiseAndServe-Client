@@ -158,7 +158,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
+                    className="btn-danger cursor-pointer w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
                   >
                     Logout
                   </button>
@@ -198,49 +198,84 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+{/* Mobile Menu */}
+{menuOpen && (
+  <div
+    className={`md:hidden px-4 pb-4 space-y-2 ${
+      isDarkMode
+        ? "bg-gray-900 text-white"
+        : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
+    }`}
+  >
+    {/* Main Links */}
+    <NavLink
+      to="/"
+      className="block py-2"
+      onClick={() => setMenuOpen(false)}
+    >
+      Home
+    </NavLink>
+    <NavLink
+      to="/contact"
+      className="block py-2"
+      onClick={() => setMenuOpen(false)}
+    >
+      Contact
+    </NavLink>
+    <NavLink
+      to="/upcoming-events"
+      className="block py-2"
+      onClick={() => setMenuOpen(false)}
+    >
+      Upcoming Events
+    </NavLink>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div
-          className={`md:hidden px-4 pb-4 space-y-2 ${
-            isDarkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
-          }`}
+    {/* User-specific Links */}
+    {!user ? (
+      <Link
+        to="/login"
+        className="block py-2 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg text-center"
+        onClick={() => setMenuOpen(false)}
+      >
+        Login
+      </Link>
+    ) : (
+      <>
+        <Link
+          to="/create-event"
+          className="block py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] rounded-lg transition"
+          onClick={() => setMenuOpen(false)}
         >
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              isActive
-                ? "block text-[#FF6B35] font-semibold"
-                : "block hover:text-[#A8DADC] transition-colors"
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/contact"
-            className={({ isActive }) =>
-              isActive
-                ? "block text-[#FF6B35] font-semibold"
-                : "block hover:text-[#A8DADC] transition-colors"
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Contact
-          </NavLink>
-          <NavLink
-            to="/upcoming-events"
-            className={({ isActive }) =>
-              isActive
-                ? "block text-[#FF6B35] font-semibold"
-                : "block hover:text-[#A8DADC] transition-colors"
-            }
-            onClick={() => setMenuOpen(false)}
-          >
-            Upcoming Events
-          </NavLink>
-        </div>
-      )}
+          Create Event
+        </Link>
+        <Link
+          to="/manage-events"
+          className="block py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] rounded-lg transition"
+          onClick={() => setMenuOpen(false)}
+        >
+          Manage Events
+        </Link>
+        <Link
+          to="/joined-events"
+          className="block py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] rounded-lg transition"
+          onClick={() => setMenuOpen(false)}
+        >
+          Joined Events
+        </Link>
+        <button
+          onClick={() => {
+            handleLogout();
+            setMenuOpen(false);
+          }}
+          className="cursor-pointer block w-full text-left py-2 hover:bg-red-500 hover:text-white rounded-lg transition"
+        >
+          Logout
+        </button>
+      </>
+    )}
+  </div>
+)}
+
     </nav>
   );
 };
