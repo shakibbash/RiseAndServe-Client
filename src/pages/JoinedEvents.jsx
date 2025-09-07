@@ -4,9 +4,11 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaPlus, FaTag } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { eventAPI } from "../Api/apiClient"; // import your API
+import { eventAPI } from "../Api/apiClient"; 
+import { useTheme } from "../Provider/ThemeContext"; 
 
 const JoinedEvents = () => {
+  const { isDarkMode } = useTheme(); // get dark mode
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,26 +17,26 @@ const JoinedEvents = () => {
     AOS.init({ duration: 800, easing: "ease-in-out", once: false });
   }, []);
 
-useEffect(() => {
-  const fetchJoinedEvents = async () => {
-    try {
-      const email = localStorage.getItem('riseAndServeEmail'); // user email
-      const res = await eventAPI.joined(email);
-      setEvents(res.data);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to load joined events.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchJoinedEvents = async () => {
+      try {
+        const email = localStorage.getItem('riseAndServeEmail'); // user email
+        const res = await eventAPI.joined(email);
+        setEvents(res.data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to load joined events.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchJoinedEvents();
-}, []);
+    fetchJoinedEvents();
+  }, []);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className={`flex justify-center items-center min-h-screen ${isDarkMode ? "bg-gray-900" : "bg-white"}`}>
         <div className="relative">
           <div className="w-10 h-10 border-primary border-2 rounded-full"></div>
           <div className="w-10 h-10 border-accent border-t-2 animate-spin rounded-full absolute top-0 left-0"></div>
@@ -48,9 +50,9 @@ useEffect(() => {
 
   if (events.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[40vh]">
+      <div className={`flex flex-col items-center justify-center min-h-[40vh] ${isDarkMode ? "bg-gray-900 text-gray-300" : "bg-white text-gray-800"}`}>
         <h1 className="text-center text-2xl font-bold mb-2">No Events Found</h1>
-        <p className="text-gray-600 text-center mb-4">
+        <p className="text-gray-500 text-center mb-4">
           You haven't joined any events yet.
         </p>
         <div className="flex justify-center mt-4">
@@ -66,9 +68,9 @@ useEffect(() => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto my-12 px-4">
+    <div className={` p-10 ${isDarkMode ? "bg-gray-900 text-black" : "bg-white text-gray-900"}`}>
       <Toaster />
-      <h1 className="text-center text-3xl font-bold text-[#1D3557] mb-8">
+      <h1 className="text-center text-3xl font-bold text-white dark:text-gray-700 mb-8">
         Your Joined Events
       </h1>
       <div className="grid md:grid-cols-2 gap-6">
@@ -77,7 +79,7 @@ useEffect(() => {
             key={event._id}
             data-aos="fade-up"
             data-aos-once="false"
-            className="flex bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition"
+            className={`flex rounded-xl overflow-hidden shadow-md hover:shadow-lg transition ${isDarkMode ? "bg-gray-800" : "bg-white"}`}
           >
             <img
               src={event.thumbnail}
@@ -86,22 +88,22 @@ useEffect(() => {
             />
             <div className="flex-1 p-4 flex flex-col justify-between">
               <div>
-                <h2 className="text-lg md:text-xl font-semibold text-[#457B9D] mb-2">
+                <h2 className="text-lg md:text-xl font-semibold text-[#457B9D] dark:text-blue-300 mb-2">
                   {event.title}
                 </h2>
-                <p className="text-gray-700 text-sm md:text-base mb-2">
+                <p className={`text-sm md:text-base mb-2 ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
                   {event.description.length > 120
                     ? event.description.slice(0, 120) + "..."
                     : event.description}
                 </p>
-                <div className="flex flex-wrap gap-3 text-gray-600 text-sm md:text-base">
-                  <span className="flex items-center gap-1">
+                <div className="flex flex-wrap gap-3 text-sm md:text-base">
+                  <span className={`flex items-center gap-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <FaTag /> {event.eventType}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className={`flex items-center gap-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <FaCalendarAlt /> {new Date(event.eventDate).toLocaleDateString()}
                   </span>
-                  <span className="flex items-center gap-1">
+                  <span className={`flex items-center gap-1 ${isDarkMode ? "text-gray-300" : "text-gray-600"}`}>
                     <FaMapMarkerAlt /> {event.location}
                   </span>
                 </div>
