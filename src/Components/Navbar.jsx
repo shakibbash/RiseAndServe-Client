@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import { FaBars, FaTimes, FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon } from "react-icons/fa";
 import { useAuth } from "../Provider/AuthProvider";
-import Swal from "sweetalert2";
 import { useTheme } from "../Provider/ThemeContext";
+import { motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -34,8 +34,7 @@ const Navbar = () => {
             });
             navigate("/");
           })
-          .catch((error) => {
-            console.error(error);
+          .catch(() => {
             Swal.fire({
               icon: "error",
               title: "Error",
@@ -47,27 +46,46 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`shadow-lg transition-colors duration-300 ${
-      isDarkMode
-        ? "bg-gray-900 text-white"
-        : "bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] text-white"
-    }`}>
-      <div className="px-2 md:px-8 flex justify-between items-center h-16">
+    <nav
+      className={`shadow-lg transition-colors duration-300 ${
+        isDarkMode
+          ? "bg-gray-900 text-white"
+          : "bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] text-white"
+      }`}
+    >
+      <div className="px-4 md:px-8 flex justify-between items-center h-16 relative">
         {/* Logo */}
-        <Link
-          to="/"
-          className="flex items-center py-3 text-2xl font-bold"
-        >
+        <Link to="/" className="flex items-center py-3 text-2xl font-bold">
           <img
             src="/assets/logo.png"
             alt="RiseAndServe Logo"
-            className="w-[80px] p-2"
+            className="w-[70px] p-1"
           />
           RiseAndServe
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* Center Links */}
+        <div className="hidden md:flex space-x-10 absolute left-1/2 transform -translate-x-1/2">
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#FF6B35] font-semibold"
+                : "hover:text-[#A8DADC] transition-colors"
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive
+                ? "text-[#FF6B35] font-semibold"
+                : "hover:text-[#A8DADC] transition-colors"
+            }
+          >
+            Contact
+          </NavLink>
           <NavLink
             to="/upcoming-events"
             className={({ isActive }) =>
@@ -78,7 +96,10 @@ const Navbar = () => {
           >
             Upcoming Events
           </NavLink>
+        </div>
 
+        {/* Right side: Theme & Auth */}
+        <div className="hidden md:flex items-center space-x-4">
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -95,7 +116,7 @@ const Navbar = () => {
           {!user ? (
             <Link
               to="/login"
-              className="bg-gradient-to-r from-[#FF6B35] to-[#F77F00] w-[90px] h-10 flex items-center justify-center rounded-full hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
+              className="bg-gradient-to-r from-[#FF6B35] to-[#F77F00] px-4 py-2 rounded-full hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
             >
               Login
             </Link>
@@ -105,38 +126,39 @@ const Navbar = () => {
                 src={user.photoURL}
                 alt={user.displayName}
                 className="w-10 h-10 rounded-full cursor-pointer"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                onClick={() => setMenuOpen(!menuOpen)}
                 title={user.displayName}
               />
-
-              {dropdownOpen && (
-                <div className={`absolute right-0 mt-2 w-48 rounded shadow-lg z-50 ${
-                  isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
-                }`}>
+              {menuOpen && (
+                <div
+                  className={`absolute right-0 mt-2 w-48 rounded shadow-lg z-50 ${
+                    isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
+                  }`}
+                >
                   <Link
                     to="/create-event"
                     className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setMenuOpen(false)}
                   >
                     Create Event
                   </Link>
                   <Link
                     to="/manage-events"
                     className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setMenuOpen(false)}
                   >
                     Manage Events
                   </Link>
                   <Link
                     to="/joined-events"
                     className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={() => setMenuOpen(false)}
                   >
                     Joined Events
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="cursor-pointer w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
+                    className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
                   >
                     Logout
                   </button>
@@ -146,9 +168,8 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Hamburger */}
         <div className="md:hidden flex items-center space-x-2">
-          {/* Theme toggle */}
           <button
             onClick={toggleTheme}
             className={`p-2 rounded-full transition-colors duration-300 ${
@@ -156,25 +177,57 @@ const Navbar = () => {
                 ? "bg-gray-700 text-yellow-300 hover:bg-gray-600"
                 : "bg-orange-100 text-orange-500 hover:bg-orange-200"
             }`}
-            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {isDarkMode ? <FaSun /> : <FaMoon />}
           </button>
 
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="ml-2 focus:outline-none"
-          >
-            {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          {/* Animated Hamburger */}
+          <button onClick={() => setMenuOpen(!menuOpen)} className="relative w-8 h-6 focus:outline-none">
+            <motion.span
+              animate={menuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+              className="block w-full h-1 bg-white rounded"
+            />
+            <motion.span
+              animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
+              className="block w-full h-1 bg-white rounded my-1"
+            />
+            <motion.span
+              animate={menuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+              className="block w-full h-1 bg-white rounded"
+            />
           </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className={`md:hidden px-4 pb-4 space-y-2 ${
-          isDarkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
-        }`}>
+        <div
+          className={`md:hidden px-4 pb-4 space-y-2 ${
+            isDarkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
+          }`}
+        >
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "block text-[#FF6B35] font-semibold"
+                : "block hover:text-[#A8DADC] transition-colors"
+            }
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={({ isActive }) =>
+              isActive
+                ? "block text-[#FF6B35] font-semibold"
+                : "block hover:text-[#A8DADC] transition-colors"
+            }
+            onClick={() => setMenuOpen(false)}
+          >
+            Contact
+          </NavLink>
           <NavLink
             to="/upcoming-events"
             className={({ isActive }) =>
@@ -186,46 +239,6 @@ const Navbar = () => {
           >
             Upcoming Events
           </NavLink>
-
-          {!user ? (
-            <Link
-              to="/login"
-              className="block bg-gradient-to-r from-[#FF6B35] to-[#F77F00] px-4 py-2 rounded hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login
-            </Link>
-          ) : (
-            <>
-              <Link
-                to="/create-event"
-                className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                onClick={() => setMenuOpen(false)}
-              >
-                Create Event
-              </Link>
-              <Link
-                to="/manage-events"
-                className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                onClick={() => setMenuOpen(false)}
-              >
-                Manage Events
-              </Link>
-              <Link
-                to="/joined-events"
-                className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
-                onClick={() => setMenuOpen(false)}
-              >
-                Joined Events
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
-              >
-                Logout
-              </button>
-            </>
-          )}
         </div>
       )}
     </nav>

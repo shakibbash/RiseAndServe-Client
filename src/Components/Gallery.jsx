@@ -23,7 +23,7 @@ const Gallery = () => {
     <section
       id="gallery"
       className={`py-16 px-6 ${
-        isDarkMode ? "bg-gray-900 text-gray-200" : "bg-gray-50 text-gray-800"
+        isDarkMode ? "bg-gray-900 text-gray-200" : "bg-slate-50 text-gray-800"
       }`}
     >
       {/* Heading */}

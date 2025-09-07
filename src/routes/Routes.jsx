@@ -11,6 +11,7 @@ import UpcomingEvents from "../pages/UpcomingEvents";
 import EventDetails from "../pages/EventDetails";
 import JoinedEvents from "../pages/JoinedEvents";
 import ManageEvent from "../pages/ManageEvent";
+import Contact from "../Components/Contact";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
         path: "upcoming-events",
         element: <UpcomingEvents />,
       },
+      {
+        path:'/contact',
+        element:<Contact></Contact>
+      }
      
     ],
     
