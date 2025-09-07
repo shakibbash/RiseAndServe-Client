@@ -9,10 +9,10 @@ import {
   FaPhoneAlt,
 } from "react-icons/fa";
 import { Link } from "react-router";
-import { useTheme } from "../Provider/ThemeContext"; // ✅ import useTheme hook
+import { useTheme } from "../Provider/ThemeContext";
 
 const Footer = () => {
-  const { isDarkMode } = useTheme(); // ✅ get theme state
+  const { isDarkMode } = useTheme();
 
   return (
     <footer
@@ -20,9 +20,9 @@ const Footer = () => {
         isDarkMode
           ? "bg-gradient-to-r from-gray-900 to-gray-800 text-gray-200"
           : "bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] text-white"
-      } py-6`}
+      } py-8 px-4 sm:px-6 lg:px-8`}
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
         {/* About */}
         <div className="hover:translate-y-1 transition-transform duration-300">
           <Link
@@ -32,7 +32,7 @@ const Footer = () => {
             <img
               src="/assets/logo.png"
               alt="RiseAndServe Logo"
-              className="w-[80px] p-2"
+              className="w-[60px] sm:w-[80px] p-2"
             />
             RiseAndServe
           </Link>
@@ -47,7 +47,7 @@ const Footer = () => {
           <h3 className="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">
             Quick Links
           </h3>
-          <ul className="space-y-3">
+          <ul className="space-y-2 sm:space-y-3">
             <li>
               <a href="#banner" className="hover:text-yellow-400 transition">
                 Home
@@ -79,7 +79,7 @@ const Footer = () => {
           <h3 className="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">
             Contact Us
           </h3>
-          <ul className="space-y-3 text-sm mb-4">
+          <ul className="space-y-2 sm:space-y-3 text-sm mb-4">
             <li className="flex items-center gap-2">
               <FaEnvelope className="text-yellow-400" /> info@riseandserve.org
             </li>
@@ -89,38 +89,38 @@ const Footer = () => {
           </ul>
 
           {/* Social Icons */}
-          <div className="flex gap-3 mt-2">
+          <div className="flex gap-2 sm:gap-3 mt-2 flex-wrap">
             <a
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#1877F2] text-white hover:scale-110 transition-transform"
+              className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#1877F2] text-white hover:scale-110 transition-transform"
             >
-              <FaFacebookF className="text-xl" />
+              <FaFacebookF className="text-lg sm:text-xl" />
             </a>
             <a
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#333] text-white hover:scale-110 transition-transform"
+              className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#333] text-white hover:scale-110 transition-transform"
             >
-              <FaGithub className="text-xl" />
+              <FaGithub className="text-lg sm:text-xl" />
             </a>
             <a
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white hover:scale-110 transition-transform"
+              className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] text-white hover:scale-110 transition-transform"
             >
-              <FaInstagram className="text-xl" />
+              <FaInstagram className="text-lg sm:text-xl" />
             </a>
             <a
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#0A66C2] text-white hover:scale-110 transition-transform"
+              className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-[#0A66C2] text-white hover:scale-110 transition-transform"
             >
-              <FaLinkedinIn className="text-xl" />
+              <FaLinkedinIn className="text-lg sm:text-xl" />
             </a>
           </div>
         </div>
@@ -137,9 +137,15 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Your email"
-              className="bg-white px-3 py-2 rounded-l-md border border-gray-300 text-black w-full sm:w-auto focus:outline-none"
+              className={`px-3 py-2 rounded-md border w-full sm:flex-1 focus:outline-none ${
+                isDarkMode
+                  ? "border-gray-600 bg-gray-700 text-white placeholder-gray-400"
+                  : "border-gray-300 bg-white text-gray-900 placeholder-gray-500"
+              }`}
             />
-            <button className="px-4 py-2 rounded-r-md bg-yellow-400 text-gray-900 font-semibold hover:bg-yellow-500 transition">
+            <button
+              className="px-4 py-2 rounded-md bg-yellow-400 text-gray-900 font-semibold hover:bg-yellow-500 transition"
+            >
               Subscribe
             </button>
           </div>
@@ -147,9 +153,16 @@ const Footer = () => {
       </div>
 
       {/* Bottom */}
-      <div className="mt-12 border-t border-gray-300 pt-6 text-center text-sm opacity-80">
+      <div
+        className={`mt-12 border-t ${
+          isDarkMode ? "border-gray-600" : "border-gray-300"
+        } pt-6 text-center text-sm opacity-80`}
+      >
         &copy; {new Date().getFullYear()} RiseAndServe. All rights reserved.
       </div>
+       <div className="text-center mt-6 text-base text-white">
+              Developed <span className="text-orange-500">♥</span> by <a className='underline text-orange-400 hover:text-orange-300' href="https://www.facebook.com/shakib.hossian.58">Shakib Hossain</a>
+            </div>
     </footer>
   );
 };
