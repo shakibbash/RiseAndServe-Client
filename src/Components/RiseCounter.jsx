@@ -2,9 +2,17 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 import { FaUsers, FaCalendarAlt, FaClipboardList, FaGlobeAmericas } from "react-icons/fa";
+import { useTheme } from "../Provider/ThemeContext";
 
 const RiseCounter = () => {
+  const { isDarkMode } = useTheme(); 
+  const { ref, inView } = useInView({
+    triggerOnce: false,
+    threshold: 0.3,
+  });
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -17,9 +25,15 @@ const RiseCounter = () => {
 
   return (
     <section
+      ref={ref}
       id="counter"
-      className="bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white py-16"
-      data-aos="fade-up"  data-aos-once="false"
+      className={`py-16 transition-colors duration-300 ${
+        isDarkMode 
+          ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white"
+          : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
+      }`}
+      data-aos="fade-up"
+      data-aos-once="false"
     >
       {/* Heading */}
       <p className="text-[#FF6B35] font-semibold tracking-widest uppercase mb-2 text-center">
@@ -34,16 +48,17 @@ const RiseCounter = () => {
 
       {/* Counters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-11/12 mx-auto">
-
         {/* Volunteers */}
         <div
           data-aos="zoom-in"
-          data-aos-delay="100"  data-aos-once="false"
+          data-aos-delay="100"
           className="bg-white/10 p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1"
         >
           <FaUsers className="text-[#FF6B35] text-4xl mx-auto mb-4" />
           <h2 className="text-4xl font-bold text-[#FF6B35]">
-            <CountUp start={0} end={5000} duration={2} suffix="+" separator="," />
+            {inView && (
+              <CountUp start={0} end={5000} duration={2} suffix="+" separator="," />
+            )}
           </h2>
           <p className="mt-2 font-medium text-sm">Volunteers Joined</p>
         </div>
@@ -51,12 +66,12 @@ const RiseCounter = () => {
         {/* Events Organized */}
         <div
           data-aos="zoom-in"
-          data-aos-delay="200"  data-aos-once="false"
+          data-aos-delay="200"
           className="bg-white/10 p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1"
         >
           <FaCalendarAlt className="text-[#2A9D8F] text-4xl mx-auto mb-4" />
           <h2 className="text-4xl font-bold text-[#2A9D8F]">
-            <CountUp start={0} end={250} duration={2} suffix="+" />
+            {inView && <CountUp start={0} end={250} duration={2} suffix="+" />}
           </h2>
           <p className="mt-2 font-medium text-sm">Events Organized</p>
         </div>
@@ -64,12 +79,12 @@ const RiseCounter = () => {
         {/* Communities Impacted */}
         <div
           data-aos="zoom-in"
-          data-aos-delay="300"  data-aos-once="false"
+          data-aos-delay="300"
           className="bg-white/10 p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1"
         >
           <FaClipboardList className="text-[#F77F00] text-4xl mx-auto mb-4" />
           <h2 className="text-4xl font-bold text-[#F77F00]">
-            <CountUp start={0} end={120} duration={2} suffix="+" />
+            {inView && <CountUp start={0} end={120} duration={2} suffix="+" />}
           </h2>
           <p className="mt-2 font-medium text-sm">Communities Impacted</p>
         </div>
@@ -77,16 +92,15 @@ const RiseCounter = () => {
         {/* Countries Reached */}
         <div
           data-aos="zoom-in"
-          data-aos-delay="400"  data-aos-once="false"
+          data-aos-delay="400"
           className="bg-white/10 p-6 rounded-lg shadow-sm text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1"
         >
           <FaGlobeAmericas className="text-[#E63946] text-4xl mx-auto mb-4" />
           <h2 className="text-4xl font-bold text-[#E63946]">
-            <CountUp start={0} end={50} duration={2} suffix="+" />
+            {inView && <CountUp start={0} end={50} duration={2} suffix="+" />}
           </h2>
           <p className="mt-2 font-medium text-sm">Countries Reached</p>
         </div>
-
       </div>
     </section>
   );
