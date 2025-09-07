@@ -1,70 +1,73 @@
 import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router"; // Correct import
-import { FaBars, FaTimes } from "react-icons/fa";
+import { Link, NavLink, useNavigate } from "react-router";
+import { FaBars, FaTimes, FaSun, FaMoon } from "react-icons/fa";
 import { useAuth } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
-
-// import ThemeToggle from "./ThemeToggle"; // Uncomment when ready
+import { useTheme } from "../Provider/ThemeContext";
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-console.log(user)
-const handleLogout = () => {
+
+  const handleLogout = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You will be logged out of your account",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, log out'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out",
     }).then((result) => {
       if (result.isConfirmed) {
         logOut()
           .then(() => {
             Swal.fire({
-              icon: 'success',
-              title: 'Logged Out',
-              text: 'You have been successfully logged out',
+              icon: "success",
+              title: "Logged Out",
+              text: "You have been successfully logged out",
               timer: 1500,
-              showConfirmButton: false
+              showConfirmButton: false,
             });
-            navigate('/');
+            navigate("/");
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(error);
             Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Failed to log out. Please try again.'
+              icon: "error",
+              title: "Error",
+              text: "Failed to log out. Please try again.",
             });
           });
       }
     });
   };
 
-
   return (
-    <nav className="bg-gradient-to-r from-[#457B9D] to-[#3d6fb5]  text-white shadow-lg">
+    <nav className={`shadow-lg transition-colors duration-300 ${
+      isDarkMode
+        ? "bg-gray-900 text-white"
+        : "bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] text-white"
+    }`}>
       <div className="px-2 md:px-8 flex justify-between items-center h-16">
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center py-3 text-2xl font-bold text-[#F1FAEE]"
+          className="flex items-center py-3 text-2xl font-bold"
         >
           <img
             src="/assets/logo.png"
             alt="RiseAndServe Logo"
-            className="w-[80px]  p-2"
+            className="w-[80px] p-2"
           />
           RiseAndServe
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-4">
           <NavLink
             to="/upcoming-events"
             className={({ isActive }) =>
@@ -76,8 +79,18 @@ const handleLogout = () => {
             Upcoming Events
           </NavLink>
 
-          {/* ThemeToggle placeholder */}
-          {/* <ThemeToggle /> */}
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-full transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-gray-700 text-yellow-300 hover:bg-gray-600"
+                : "bg-orange-100 text-orange-500 hover:bg-orange-200"
+            }`}
+            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </button>
 
           {!user ? (
             <Link
@@ -88,18 +101,18 @@ const handleLogout = () => {
             </Link>
           ) : (
             <div className="relative">
-              {/* Profile Picture */}
               <img
-                src={user.photoURL} 
-                alt={user.displayName} 
+                src={user.photoURL}
+                alt={user.displayName}
                 className="w-10 h-10 rounded-full cursor-pointer"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 title={user.displayName}
               />
 
-              {/* Dropdown */}
               {dropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded shadow-lg z-50">
+                <div className={`absolute right-0 mt-2 w-48 rounded shadow-lg z-50 ${
+                  isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-gray-800"
+                }`}>
                   <Link
                     to="/create-event"
                     className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
@@ -122,7 +135,7 @@ const handleLogout = () => {
                     Joined Events
                   </Link>
                   <button
-                    onClick={handleLogout} 
+                    onClick={handleLogout}
                     className="cursor-pointer w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
                   >
                     Logout
@@ -134,7 +147,20 @@ const handleLogout = () => {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex items-center space-x-2">
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-full transition-colors duration-300 ${
+              isDarkMode
+                ? "bg-gray-700 text-yellow-300 hover:bg-gray-600"
+                : "bg-orange-100 text-orange-500 hover:bg-orange-200"
+            }`}
+            title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </button>
+
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="ml-2 focus:outline-none"
@@ -146,7 +172,9 @@ const handleLogout = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white px-4 pb-4 space-y-2">
+        <div className={`md:hidden px-4 pb-4 space-y-2 ${
+          isDarkMode ? "bg-gray-900 text-white" : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
+        }`}>
           <NavLink
             to="/upcoming-events"
             className={({ isActive }) =>
@@ -159,7 +187,7 @@ const handleLogout = () => {
             Upcoming Events
           </NavLink>
 
-          {!user  ? (
+          {!user ? (
             <Link
               to="/login"
               className="block bg-gradient-to-r from-[#FF6B35] to-[#F77F00] px-4 py-2 rounded hover:from-[#F77F00] hover:to-[#FF6B35] transition-all"
@@ -168,7 +196,7 @@ const handleLogout = () => {
               Login
             </Link>
           ) : (
-            <div className="space-y-1">
+            <>
               <Link
                 to="/create-event"
                 className="block px-4 py-2 hover:bg-gradient-to-r hover:from-[#FF6B35] hover:to-[#F77F00] hover:text-white transition"
@@ -191,12 +219,12 @@ const handleLogout = () => {
                 Joined Events
               </Link>
               <button
-                onClick={handleLogout} 
+                onClick={handleLogout}
                 className="w-full text-left px-4 py-2 hover:bg-red-500 hover:text-white transition"
               >
                 Logout
               </button>
-            </div>
+            </>
           )}
         </div>
       )}
