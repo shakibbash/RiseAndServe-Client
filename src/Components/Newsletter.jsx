@@ -2,8 +2,11 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { FaPaperPlane } from "react-icons/fa";
+import { useTheme } from "../Provider/ThemeContext"; 
 
 const Newsletter = () => {
+  const { isDarkMode } = useTheme(); 
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -16,7 +19,11 @@ const Newsletter = () => {
   return (
     <section
       id="newsletter"
-      className="relative bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white py-16 px-6"
+      className={`relative py-16 px-6 transition-colors duration-300 ${
+        isDarkMode 
+          ? "bg-gradient-to-r from-gray-900 to-gray-800 text-white"
+          : "bg-gradient-to-r from-[#1D3557] to-[#457B9D] text-white"
+      }`}
       data-aos="fade-up"
     >
       {/* Decorative Shapes */}
@@ -50,7 +57,11 @@ const Newsletter = () => {
           <input
             type="email"
             placeholder="Enter your email"
-            className="w-full bg-amber-50 sm:w-2/3 px-5 py-3 rounded-full text-black focus:outline-none focus:ring-2 focus:ring-[#FF6B35] transition-all"
+            className={`w-full sm:w-2/3 px-5 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-[#FF6B35] transition-all ${
+             isDarkMode 
+                ? "bg-gray-700 text-white placeholder-gray-300"
+                : "bg-amber-50 text-black"
+            }`}
           />
           <button
             type="button"
