@@ -8,7 +8,7 @@ const Loader = () => {
                 <div className="w-20 h-20 border-accent border-t-4 animate-spin rounded-full absolute top-0 left-0"></div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-primary-dark font-bold">
                       <img className='w-[100px]'
-                        src='public/assets/logo.png' 
+                        src='/assets/logo.png' 
         
                     />
                 </div>
