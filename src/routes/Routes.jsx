@@ -47,7 +47,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(` https://b11a11-server-side-shakibbash-ctf8t5uq3.vercel.app/events/${params.id}`),
+          fetch(` https://b11a11-server-side-shakibbash-nicipffe1.vercel.app/events/${params.id}`),
       },
       {
         path: "joined-events",
