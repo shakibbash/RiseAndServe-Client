@@ -1,96 +1,65 @@
+---
 
-# React + Vite + Tailwind CSS + React Router Boilerplate
+# Client README — Rise And Serve (Assignment-11)
 
-> **⚠️ WARNING:**
-> Do **NOT** use `npm i react-twd-router-bp` to install this package. This is a CLI tool and should be run with `npx react-twd-router-bp`.
-> Using `npm i` will not scaffold your project and is not the intended usage.
+## Project Name
 
-This boilerplate provides a ready-to-use setup for building React applications with Vite, Tailwind CSS, and React Router. It includes basic routing, ESLint configuration, and a clean project structure to help you start quickly and customize to your style.
+**Rise And Serve — Social Development Events Platform (Client)**
 
-## Features
-- ⚡ Fast development with Vite
-- 🎨 Tailwind CSS for utility-first styling
-- 🚦 React Router for client-side routing
-- 🧹 ESLint for code quality
-- 📁 Organized folder structure (`src/pages`, `src/routes`, etc.)
+## Live Site
 
-## Getting Started
+* **Client Production**: [https://riseandserve-f443d.web.app](https://riseandserve-f443d.web.app)
 
+## Purpose
 
+A community-driven frontend platform where users can view upcoming events, create and join events, and interact with the social development community. Fully responsive with theme toggle and user authentication.
 
+## Key Features
 
+* Email/password + Google login authentication (Firebase)
+* Responsive design (mobile, tablet, desktop)
+* Theme toggle (light/dark)
+* View upcoming events
+* Join events (with private routes)
+* Search and filter events
+* Toast/sweetalert notifications
 
-## Usage
+## Dependencies
 
-To scaffold a new React + Vite + Tailwind CSS + React Router project, run:
-
-```
-npx react-twd-boiler
-```
-
-### Setup Steps
-
-1. **Project Name:**  
-	The CLI will prompt:  
-	`What will your project name be?`
-
-2. **Latest Packages Only:**  
-	The CLI will always install the latest versions of React, Tailwind CSS, and React Router. There is no option to select specific versions.
-
-3. **Project Creation:**  
-	The CLI will copy the boilerplate files, update dependencies, and install everything automatically.
-
-### Start Development Server
-
-
-```
-cd <your-project-name>
-npm run dev
-```
-
-Open [http://localhost:5173](http://localhost:5173) to view your app.
-
-## Project Structure
-
-```
-├── public/
-├── src/
-│   ├── assets/
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   └── Error.jsx
-│   ├── routes/
-│   │   └── Routes.jsx
-│   ├── index.css
-│   └── main.jsx
-├── package.json
-├── README.md
-├── vite.config.js
-└── ...
+```json
+{
+  "@react-google-maps/api": "^2.20.7",
+  "@tailwindcss/vite": "latest",
+  "aos": "^2.3.4",
+  "axios": "^1.11.0",
+  "date-fns": "^4.1.0",
+  "firebase": "^12.2.1",
+  "framer-motion": "^12.23.12",
+  "inquirer": "^12.9.2",
+  "lottie-react": "^2.4.1",
+  "react-countup": "^6.5.3",
+  "react-datepicker": "^8.7.0",
+  "react-dom": "latest",
+  "react-helmet-async": "^2.0.5",
+  "react-hook-form": "^7.62.0",
+  "react-hot-toast": "^2.6.0",
+  "react-icons": "^5.5.0",
+  "react-intersection-observer": "^9.16.0",
+  "react-modal": "^3.16.3",
+  "react-router": "latest",
+  "react-simple-typewriter": "^5.0.1",
+  "react-tooltip": "^5.29.1",
+  "sweetalert2": "^11.22.5",
+  "swiper": "^11.2.10",
+  "tailwindcss": "latest"
+}
 ```
 
-## Customization
+## Deployment Instructions
 
-- Add new pages in `src/pages` and update `src/routes/Routes.jsx` for routing.
-- Customize styles in `src/index.css` and Tailwind config.
-- Update ESLint rules in `eslint.config.js` as needed.
+* Build: `npm run build`
+* Deploy to Firebase Hosting: `firebase deploy --only hosting`
+* Make sure `.env.local` contains Firebase configuration keys.
 
-## Tailwind CSS Setup
+---
 
-Tailwind is already configured. Use its utility classes in your components. For custom configuration, edit `tailwind.config.js`.
-
-## Build for Production
-
-```
-npm run build
-```
-
-## Linting
-
-```
-npm run lint
-```
-
-## License
-
-MIT
