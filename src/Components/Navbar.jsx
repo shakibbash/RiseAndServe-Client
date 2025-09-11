@@ -103,7 +103,7 @@ const Navbar = () => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-full transition-colors duration-300 ${
+            className={`p-2 rounded-full transition-colors duration-300 cursor-pointer ${
               isDarkMode
                 ? "bg-gray-700 text-yellow-300 hover:bg-gray-600"
                 : "bg-orange-100 text-orange-500 hover:bg-orange-200"
