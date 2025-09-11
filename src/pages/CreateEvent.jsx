@@ -78,7 +78,7 @@ const CreateEvent = () => {
 
     try {
       const res = await eventAPI.create(eventData);
-      console.log("Event Created:", res.data);
+     ("Event Created:", res.data);
       Swal.fire({
         icon: "success",
         title: "Event created successfully!",
