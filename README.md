@@ -1,5 +1,3 @@
----
-
 # Client README — Rise And Serve (Assignment-11)
 
 ## Project Name
@@ -53,13 +51,3 @@ A community-driven frontend platform where users can view upcoming events, creat
   "swiper": "^11.2.10",
   "tailwindcss": "latest"
 }
-```
-
-## Deployment Instructions
-
-* Build: `npm run build`
-* Deploy to Firebase Hosting: `firebase deploy --only hosting`
-* Make sure `.env.local` contains Firebase configuration keys.
-
----
-
