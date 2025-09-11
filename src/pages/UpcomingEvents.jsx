@@ -30,7 +30,7 @@ const UpcomingEvents = () => {
     const fetchEvents = async () => {
       try {
         if (!events.length) setLoading(true);
-        const res = await axios.get("http://localhost:3000/event-search", {
+        const res = await axios.get("https://b11a11-server-side-shakibbash.vercel.app/event-search", {
           params: { search: searchTerm, type: selectedType },
         });
         setEvents(res.data);
