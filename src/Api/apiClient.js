@@ -2,7 +2,7 @@ import axios from "axios";
 import { auth } from "../../Firebase/Firebase.config";
 
 // Base URL
-const BASE_URL = "https://b11a11-server-side-shakibbash-nicipffe1.vercel.app";
+const BASE_URL = "https://b11a11-server-side-shakibbash-1qhfiq7dw.vercel.app ";
 
 // Create axios instance
 const apiClient = axios.create({
