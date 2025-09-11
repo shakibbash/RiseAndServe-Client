@@ -118,7 +118,7 @@ const login = async (email, password) => {
       const token = await result.user.getIdToken(true);
       localStorage.setItem("riseAndServeToken", token);
 
-      // ✅ FIX: Store email for joined events route
+   
       if (result.user.email) {
         localStorage.setItem("riseAndServeEmail", result.user.email);
       }

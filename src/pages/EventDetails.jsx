@@ -9,7 +9,7 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { useAuth } from "../Provider/AuthProvider";
-import { useTheme } from "../Provider/ThemeContext"; // to get isDarkMode
+import { useTheme } from "../Provider/ThemeContext"; 
 import { eventAPI } from "../Api/apiClient";
 
 const EventDetails = () => {

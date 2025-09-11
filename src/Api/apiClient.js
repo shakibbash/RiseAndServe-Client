@@ -2,7 +2,7 @@ import axios from "axios";
 import { auth } from "../../Firebase/Firebase.config";
 
 // Base URL
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://b11a11-server-side-shakibbash-ctf8t5uq3.vercel.app";
 
 // Create axios instance
 const apiClient = axios.create({
@@ -65,7 +65,7 @@ export const eventAPI = {
   update: (id, data) => apiClient.put(`/events/${id}`, data),
   delete: (id) => apiClient.delete(`/events/${id}`),
   join: (id) => apiClient.post(`/events/${id}/join`),
-  joined: () => apiClient.get("/events/joined"), // token will be automatically attached
+  joined: () => apiClient.get("/events/joined"), 
   creatorEvents: (email) => apiClient.get(`/events/creator/${email}`),
 };
 
