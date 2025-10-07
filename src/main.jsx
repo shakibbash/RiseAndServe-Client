@@ -14,7 +14,9 @@ createRoot(document.getElementById("root")).render(
           <ThemeProvider>
              <AuthProvider>
   
-        <RouterProvider router={router} />
+     <div className="poppins-regular">
+         <RouterProvider router={router} />
+     </div>
         <Toaster
           position="top-right"
           toastOptions={{
