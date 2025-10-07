@@ -122,7 +122,7 @@ const Navbar = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
-              className={`p-2.5 rounded-2xl transition-all duration-300 ${
+              className={`p-2.5 rounded-full cursor-pointer transition-all duration-300 ${
                 isDarkMode
                   ? "bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-yellow-300 hover:from-gray-700 hover:via-gray-600 hover:to-gray-700"
                   : "bg-gradient-to-r from-[#FF6B35] via-[#F77F00] to-[#FF9E58] text-white hover:from-[#F77F00] hover:via-[#FF9E58] hover:to-[#FF6B35]"
