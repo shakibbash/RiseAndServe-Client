@@ -28,15 +28,15 @@ const Home = () => {
   <HomeSlider></HomeSlider>
 </section>
       {/* ================= Feature Section ================= */}
-<section
+<section 
   className={`py-16 px-4 sm:px-6 lg:px-8 transition-all duration-500 relative overflow-hidden ${
     isDarkMode
       ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white"
-      : "bg-gradient-to-br from-blue-50 via-white to-indigo-50 text-gray-800"
+      : "bg-blue-50 text-gray-800"
   }`}
 >
   {/* Animated Background Floating Elements */}
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+  <div  className="absolute inset-0 overflow-hidden pointer-events-none">
     <motion.div
       animate={{ y: [0, -20, 0] }}
       transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -53,7 +53,7 @@ const Home = () => {
     ></motion.div>
   </div>
 
-  <div className="relative z-10 max-w-6xl mx-auto">
+  <div data-aos="fade-up" className="relative z-10 max-w-6xl mx-auto">
     {/* Heading */}
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const Home = () => {
     </motion.div>
 
     {/* Cards */}
-    <div className="grid md:grid-cols-3 gap-6">
+    <div data-aos="fade-up" className="grid md:grid-cols-3 gap-6">
       {/* Card 1 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

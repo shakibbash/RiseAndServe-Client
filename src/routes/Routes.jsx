@@ -12,6 +12,8 @@ import EventDetails from "../pages/EventDetails";
 import JoinedEvents from "../pages/JoinedEvents";
 import ManageEvent from "../pages/ManageEvent";
 import Contact from "../Components/Contact";
+import Resources from "../pages/Resources";
+import EventPassCard from "../pages/EventPassCard";
 
 const router = createBrowserRouter([
   {
@@ -66,8 +68,20 @@ const router = createBrowserRouter([
         ),
       },
       {
+  path: "event-pass/:id",
+  element: (
+    <PrivateRoute>
+      <EventPassCard />
+    </PrivateRoute>
+  ),
+},
+      {
         path: "upcoming-events",
         element: <UpcomingEvents />,
+      },
+       {
+        path:'/resources',
+        element:<Resources></Resources>
       },
       {
         path:'/contact',

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KModes Clustering Analysis Presentation Content</title>
+    <style>
+        /* Basic Styling for Presentation/Web Page */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            box-sizing: border-box;
+        }
+        .slide {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px 50px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .slide:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            color: #0056b3; /* Deep Blue Header */
+            font-size: 1.8em;
+            border-bottom: 3px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        h3 {
+            color: #28a745; /* Green Subheader */
+            font-size: 1.3em;
+            margin-top: 25px;
+        }
+        .title-slide {
+            text-align: center;
+            background-color: #e6f7ff; /* Light Blue Background */
+        }
+        .title-slide h1 {
+            font-size: 3.2em;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .title-slide p {
+            font-size: 1.5em;
+            color: #6c757d;
+        }
+        .content-list {
+            list-style-type: none;
+            padding: 0;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .content-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .content-list li::before {
+            content: '➤';
+            color: #ff6347; /* Tomato Red Bullet */
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+            position: absolute;
+            left: 0;
+        }
+        .key-stat {
+            background-color: #ffeadb;
+            color: #cc5200;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .highlight-bold {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: bold;
+            border-bottom: 3px solid #007bff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .best-performance {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="slide title-slide">
+        <h1>KModes Clustering Analysis for Cardiovascular Disease Prediction</h1>
+        <p style="font-size: 1.8em; margin: 20px 0; color: #007bff;">Uncovering Patient Subgroups Using Unsupervised Learning</p>
+        <div style="font-size: 4em; margin: 30px 0;">
+            <span style="color: #dc3545;">❤️</span> 
+            <span style="color: #6c757d; font-size: 0.8em;">/</span> 
+            <span style="color: #28a745;">📊</span>
+        </div>
+   
+    </section>
+
+    <section class="slide">
+        <h2>The Challenge: Understanding CVD Subgroups</h2>
+        <div style="display: flex; gap: 40px;">
+            <div style="flex: 2;">
+                <h3>The Problem</h3>
+                <p>Cardiovascular Disease (<span class="highlight-bold">CVD</span>) is complex. Standard predictive models often miss subtle, underlying <span class="highlight-bold">patient subgroups</span> and unique risk factor patterns.</p>
+                <div class="key-stat">
+                    Key Statistic: Analysis based on a dataset of <span style="color: #dc3545;">~10,000 patient records.</span>
+                </div>
+            </div>
+            <div style="flex: 3;">
+                <h3>The Goals (Discovery & Validation)</h3>
+                <ul class="content-list">
+                    <li><span class="highlight-bold">Goal 1 (Discovery):</span> Use <span class="highlight-bold">KModes Clustering</span> (unsupervised) to identify natural patient clusters based on categorical data.</li>
+                    <li><span class="highlight-bold">Goal 2 (Validation):</span> Compare the clustering insights against the performance of supervised classification models.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>From Raw Data to Categorical Features</h2>
+        <div style="display: flex; gap: 40px;">
+            <div style="flex: 1;">
+                <h3>Clean-up Steps</h3>
+                <ul class="content-list">
+                    <li><span class="highlight-bold">Outlier Removal:</span> Filtered extreme values for height, weight, and blood pressure (2.5th/97.5th percentiles).</li>
+                    <li><span class="highlight-bold">Correction:</span> Removed records where diastolic BP > systolic BP.</li>
+                </ul>
+            </div>
+            <div style="flex: 1;">
+                <h3>Feature Engineering (KModes Preparation)</h3>
+                <ol class="content-list" style="list-style-type: decimal;">
+                    <li><span class="highlight-bold">Age Binning:</span> Converted continuous age into clinical <span style="color: #dc3545;">5-year intervals.</span></li>
+                    <li><span class="highlight-bold">BMI Class:</span> Calculated and categorized BMI into <span style="color: #dc3545;">6 clinical classes</span> (Normal...Obesity IV).</li>
+                    <li><span class="highlight-bold">MAP Status:</span> Calculated Mean Arterial Pressure (MAP) and categorized (Low, Normal, High).</li>
+                </ol>
+                <p style="font-style: italic; margin-top: 15px;">Final Output: A dataset composed entirely of <span class="highlight-bold">numerically encoded categorical features.</span></p>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Discovery: Two Distinct Patient Subgroups</h2>
+        <h3>Methodology</h3>
+        <ul class="content-list" style="columns: 2;">
+            <li><span class="highlight-bold">Optimal k=2:</span> Clusters confirmed by the Elbow Method.</li>
+            <li><span class="highlight-bold">Clustering:</span> KModes algorithm with the robust <span style="color: #dc3545;">Huang Initialization.</span></li>
+            <li><span class="highlight-bold">Separate Models:</span> Trained individually for Male and Female populations.</li>
+        </ul>
+
+        <h3>Key Findings</h3>
+        <ul class="content-list">
+            <li><span class="highlight-bold">Low-Risk Cluster:</span> Clusters 0 (Female) and 2 (Male) consistently showed significantly <span style="color: #dc3545;">lower CVD prevalence.</span></li>
+            <li><span class="highlight-bold">Cluster Drivers:</span> Sub-clusters were primarily differentiated by <span class="highlight-bold">BMI_Class</span>, <span class="highlight-bold">smoke status</span>, and <span class="highlight-bold">age_bin</span>.</li>
+            <li><span class="highlight-bold">Insight:</span> KModes allows for <span style="color: #dc3545;">targeted preventative strategies</span> by profiling the specific risk factors that define each group.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Prediction vs. Explanation: Supervised Model Results</h2>
+        <p>Models Tested: Naive Bayes, Decision Tree, Logistic Regression, <span class="highlight-bold">Random Forest</span>.</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Test Accuracy (%)</th>
+                        <th>Overfitting Risk</th>
+                        <th>Key Finding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="best-performance">
+                        <td><span class="highlight-bold">Random Forest</span></td>
+                        <td><span style="color: #dc3545;">72%</span></td>
+                        <td>Low</td>
+                        <td><span class="highlight-bold">Best Predictive Performance</span></td>
+                    </tr>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>71%</td>
+                        <td>Low</td>
+                        <td>Strong, interpretable results</td>
+                    </tr>
+                    <tr>
+                        <td>Naive Bayes</td>
+                        <td>70%</td>
+                        <td>Moderate</td>
+                        <td>Baseline performance</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td>68%</td>
+                        <td><span style="color: #dc3545;">High</span></td>
+                        <td>Susceptible to overfitting</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 25px; font-weight: bold; font-size: 1.1em;">
+            Conclusion: <span class="highlight-bold">Random Forest</span> provided the highest predictive accuracy, but <span style="color: #dc3545;">KModes provided the essential explanatory power</span> by revealing the underlying structure of the data.
+        </p>
+    </section>
+
+    <section class="slide">
+        <h2>Conclusion and Next Steps</h2>
+        <div style="display: flex; gap: 40px;">
+            <div style="flex: 1;">
+                <h3>Key Takeaways</h3>
+                <ul class="content-list">
+                    <li><span class="highlight-bold">KModes Success:</span> Provided novel, unsupervised insights into patient segmentation using categorical data.</li>
+                    <li>Engineered categorical features proved highly relevant to CVD risk.</li>
+                    <li><span class="highlight-bold">Model Choice:</span> KModes was superior to $\text{K-Means}$ for this data type.</li>
+                </ul>
+            </div>
+            <div style="flex: 1;">
+                <h3>Future Research</h3>
+                <ul class="content-list">
+                    <li><span class="highlight-bold">Hybrid Clustering:</span> Integrate continuous numerical features (KModes + $\text{K-Means}$).</li>
+                    <li><span class="highlight-bold">Stability:</span> Explore advanced $\text{KModes}$ initialization methods [2].</li>
+                    <li><span class="highlight-bold">Robustness:</span> Apply <span style="color: #dc3545;">ensemble clustering</span> techniques for more reliable subgroup identification.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

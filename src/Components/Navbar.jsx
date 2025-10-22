@@ -3,7 +3,9 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { FaSun, FaMoon, FaChevronDown, FaBell, FaUserCircle, FaPlus, FaTasks, FaRegCheckCircle, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../Provider/AuthProvider";
 import { useTheme } from "../Provider/ThemeContext";
-import { motion, AnimatePresence } from "framer-motion";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+import {  AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
@@ -50,6 +52,7 @@ const Navbar = () => {
     { to: "/", label: "Home" },
     { to: "/contact", label: "Contact" },
     { to: "/upcoming-events", label: "Upcoming Events" },
+    { to: "/resources", label: "Resources" },
   ];
 
   const userLinks = [
@@ -69,7 +72,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 group">
+          <Link to="/" className="flex items-center justify-center group">
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -78,7 +81,7 @@ const Navbar = () => {
               <img
                 src="/assets/logo.png"
                 alt="RiseAndServe Logo"
-                className="w-10 h-10 transition-transform duration-300 group-hover:rotate-12"
+                className="w-14 h-14 transition-transform duration-300 group-hover:rotate-12"
               />
             </motion.div>
             <span className="text-xl md:text-2xl font-bold text-white">
@@ -93,7 +96,7 @@ const Navbar = () => {
                 key={to}
                 to={to}
                 className={({ isActive }) =>
-                  `relative px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  `relative px-3 py-1 rounded-full font-medium transition-all duration-300 ${
                     isActive
                       ? "bg-gradient-to-r from-[#FF6B35] via-[#F77F00] to-[#FF9E58] text-white shadow-lg shadow-orange-500/20"
                       : `hover:scale-105 ${

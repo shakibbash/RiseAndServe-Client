@@ -10,7 +10,7 @@ import {
   FaThLarge,
   FaTable
 } from "react-icons/fa";
-import { useTheme } from "../Provider/ThemeContext"; // Dark mode context
+import { useTheme } from "../Provider/ThemeContext"; 
 
 const UpcomingEvents = () => {
   const { isDarkMode } = useTheme();
@@ -213,7 +213,7 @@ const UpcomingEvents = () => {
         // Responsive Table
         <div className="overflow-x-auto rounded-xl shadow-md">
           <table className={`min-w-full border ${isDarkMode ? "bg-gray-800 text-white border-gray-700" : "bg-white border-gray-200"}`}>
-            <thead className={isDarkMode ? "bg-gray-700 text-white" : "bg-blue-500 text-white"}>
+            <thead className={isDarkMode ? "bg-gray-700 text-white" : "bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] text-white"}>
               <tr>
                 <th className="px-4 py-2 border">Thumbnail</th>
                 <th className="px-4 py-2 border">Title</th>
