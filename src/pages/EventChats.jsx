@@ -95,7 +95,7 @@ const EventChats = ({ eventId }) => {
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="mt-5 bottom-1 right-10 md:-right-[95%] w-14 h-14 bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] rounded-full shadow-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 z-50 relative"
+          className="mt-5 md:bottom-1 right-10 left-[40%] md:left-[95%] w-14 h-14 bg-gradient-to-r from-[#457B9D] to-[#3d6fb5] rounded-full shadow-xl flex items-center justify-center text-white hover:scale-110 transition-transform duration-300 z-50 relative"
         >
           <FaComments size={20} />
           {unreadCount > 0 && (

@@ -15,7 +15,8 @@ import {
   FaCalendarPlus,
   FaLightbulb,
   FaCheckCircle,
-  FaClock
+  FaClock,
+  FaTimes
 } from "react-icons/fa";
 import { useAuth } from "../Provider/AuthProvider";
 import { useTheme } from "../Provider/ThemeContext";
@@ -33,6 +34,7 @@ const CreateEvent = () => {
   const [location, setLocation] = useState("");
   const [eventDate, setEventDate] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const resetForm = () => {
     setTitle("");
@@ -104,17 +106,49 @@ const CreateEvent = () => {
     }
   };
 
+  // CLOUDINARY UPLOAD
+  const handleUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      setThumbnail(data.secure_url);
+      Swal.fire("Success", "Image uploaded!", "success");
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Failed to upload image", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setThumbnail("");
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) fileInput.value = "";
+  };
+
   const eventTypes = [
-    { value: "Cleanup", label: "🚯 Cleanup", color: "from-green-500 to-emerald-600" },
-    { value: "Plantation", label: "🌿 Plantation", color: "from-green-400 to-teal-600" },
-    { value: "Donation", label: "❤️ Donation", color: "from-red-400 to-pink-600" },
-    { value: "Awareness", label: "📢 Awareness", color: "from-blue-400 to-cyan-600" },
-    { value: "Health Camp", label: "🏥 Health Camp", color: "from-purple-400 to-indigo-600" },
-    { value: "Education", label: "📚 Education", color: "from-yellow-400 to-orange-600" },
-    { value: "Community Meeting", label: "👥 Community Meeting", color: "from-indigo-400 to-purple-600" },
-    { value: "Skill Development", label: "⚡ Skill Development", color: "from-orange-400 to-red-600" },
-    { value: "Food Drive", label: "🍲 Food Drive", color: "from-amber-400 to-yellow-600" },
-    { value: "Youth Empowerment", label: "🌟 Youth Empowerment", color: "from-pink-400 to-rose-600" }
+    { value: "Cleanup", label: "🚯 Cleanup" },
+    { value: "Plantation", label: "🌿 Plantation" },
+    { value: "Donation", label: "❤️ Donation" },
+    { value: "Awareness", label: "📢 Awareness" },
+    { value: "Health Camp", label: "🏥 Health Camp" },
+    { value: "Education", label: "📚 Education" },
+    { value: "Community Meeting", label: "👥 Community Meeting" },
+    { value: "Skill Development", label: "⚡ Skill Development" },
+    { value: "Food Drive", label: "🍲 Food Drive" },
+    { value: "Youth Empowerment", label: "🌟 Youth Empowerment" }
   ];
 
   return (
@@ -122,7 +156,7 @@ const CreateEvent = () => {
       isDarkMode ? "bg-gradient-to-br from-gray-900 to-gray-800" : "bg-blue-50"
     }`}>
       <Toaster position="top-right" reverseOrder={false} />
-      
+
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -144,15 +178,11 @@ const CreateEvent = () => {
           {/* Main Form */}
           <div className="lg:col-span-2">
             <div className={`rounded-2xl p-8 backdrop-blur-sm border ${
-              isDarkMode 
-                ? "bg-gray-800/50 border-gray-700" 
-                : "bg-white/80 border-white"
+              isDarkMode ? "bg-gray-800/50 border-gray-700" : "bg-white/80 border-white"
             } shadow-2xl`}>
               {/* User Info */}
               <div className={`flex items-center gap-4 p-6 rounded-xl mb-8 ${
-                isDarkMode 
-                  ? "bg-gray-700/50 border border-gray-600" 
-                  : "bg-white border border-gray-200"
+                isDarkMode ? "bg-gray-700/50 border border-gray-600" : "bg-white border border-gray-200"
               }`}>
                 <img
                   src={user.photoURL}
@@ -163,13 +193,13 @@ const CreateEvent = () => {
                   <h3 className={`font-bold text-xl flex items-center gap-2 ${
                     isDarkMode ? "text-white" : "text-gray-800"
                   }`}>
-                    <FaUser className="text-[#FF6B35]" /> 
+                    <FaUser className="text-[#FF6B35]" />
                     {user.displayName}
                   </h3>
                   <p className={`flex items-center gap-2 ${
                     isDarkMode ? "text-gray-300" : "text-gray-600"
                   }`}>
-                    <FaEnvelope className="text-[#FF6B35]" /> 
+                    <FaEnvelope className="text-[#FF6B35]" />
                     {user.email}
                   </p>
                 </div>
@@ -183,19 +213,16 @@ const CreateEvent = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Event Title */}
                 <div>
-                  <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
+                  <label className={`text-sm font-semibold mb-3 flex items-center gap-2 ${
                     isDarkMode ? "text-gray-200" : "text-gray-700"
                   }`}>
-                    <FaHeading className="text-[#FF6B35]" />
-                    Event Title
+                    <FaHeading className="text-[#FF6B35]" /> Event Title
                   </label>
                   <input
                     type="text"
                     placeholder="e.g., Community Beach Cleanup"
                     className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                      isDarkMode 
-                        ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
-                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                      isDarkMode ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                     }`}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -204,18 +231,15 @@ const CreateEvent = () => {
 
                 {/* Event Description */}
                 <div>
-                  <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
+                  <label className={`text-sm font-semibold mb-3 flex items-center gap-2 ${
                     isDarkMode ? "text-gray-200" : "text-gray-700"
                   }`}>
-                    <FaAlignLeft className="text-[#FF6B35]" />
-                    Event Description
+                    <FaAlignLeft className="text-[#FF6B35]" /> Event Description
                   </label>
                   <textarea
                     placeholder="Describe your event, its purpose, and what participants can expect..."
                     className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                      isDarkMode 
-                        ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
-                        : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                      isDarkMode ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                     }`}
                     rows={4}
                     value={description}
@@ -226,17 +250,14 @@ const CreateEvent = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* Event Type */}
                   <div>
-                    <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
+                    <label className={`text-sm font-semibold mb-3 flex items-center gap-2 ${
                       isDarkMode ? "text-gray-200" : "text-gray-700"
                     }`}>
-                      <FaLightbulb className="text-[#FF6B35]" />
-                      Event Type
+                      <FaLightbulb className="text-[#FF6B35]" /> Event Type
                     </label>
                     <select
                       className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                        isDarkMode 
-                          ? "bg-gray-700 border-gray-600 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
+                        isDarkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"
                       }`}
                       value={eventType}
                       onChange={(e) => setEventType(e.target.value)}
@@ -252,11 +273,10 @@ const CreateEvent = () => {
 
                   {/* Event Date */}
                   <div>
-                    <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
+                    <label className={`text-sm font-semibold mb-3 flex items-center gap-2 ${
                       isDarkMode ? "text-gray-200" : "text-gray-700"
                     }`}>
-                      <FaClock className="text-[#FF6B35]" />
-                      Event Date & Time
+                      <FaClock className="text-[#FF6B35]" /> Event Date & Time
                     </label>
                     <DatePicker
                       selected={eventDate}
@@ -266,55 +286,61 @@ const CreateEvent = () => {
                       minDate={new Date()}
                       placeholderText="Select date and time"
                       className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                        isDarkMode 
-                          ? "bg-gray-700 border-gray-600 text-white" 
-                          : "bg-white border-gray-300 text-gray-900"
+                        isDarkMode ? "bg-gray-700 border-gray-600 text-white" : "bg-white border-gray-300 text-gray-900"
                       }`}
                     />
                   </div>
                 </div>
 
+                {/* Location + Thumbnail Upload */}
                 <div className="grid md:grid-cols-2 gap-6">
-                  {/* Thumbnail */}
-                  <div>
-                    <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
-                      isDarkMode ? "text-gray-200" : "text-gray-700"
-                    }`}>
-                      <FaImage className="text-[#FF6B35]" />
-                      Thumbnail Image URL
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="https://example.com/image.jpg"
-                      className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                        isDarkMode 
-                          ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
-                          : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-                      }`}
-                      value={thumbnail}
-                      onChange={(e) => setThumbnail(e.target.value)}
-                    />
-                  </div>
-
                   {/* Location */}
                   <div>
                     <label className={` text-sm font-semibold mb-3 flex items-center gap-2 ${
                       isDarkMode ? "text-gray-200" : "text-gray-700"
                     }`}>
-                      <FaMapMarkerAlt className="text-[#FF6B35]" />
-                      Location
+                      <FaMapMarkerAlt className="text-[#FF6B35]" /> Location
                     </label>
                     <input
                       type="text"
                       placeholder="e.g., Central Park, New York"
                       className={`w-full p-4 border-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent transition-all ${
-                        isDarkMode 
-                          ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" 
-                          : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
+                        isDarkMode ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400" : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
                       }`}
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                     />
+                  </div>
+
+                  {/* Thumbnail Upload */}
+                  <div className="relative">
+                    <label className={`text-sm font-semibold mb-2 flex items-center gap-2 ${
+                      isDarkMode ? "text-gray-200" : "text-gray-700"
+                    }`}>
+                      <FaImage className="text-[#FF6B35]" /> Thumbnail Image
+                    </label>
+                    <input
+                      type="file"
+                      onChange={handleUpload}
+                      disabled={uploading}
+                      className="file-input file-input-bordered w-full"
+                    />
+                    {thumbnail && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-xl"
+                      >
+                        <FaTimes />
+                      </button>
+                    )}
+                    {thumbnail && (
+                      <img
+                        src={thumbnail}
+                        alt="Preview"
+                        className="w-full h-36 object-cover rounded-lg mt-2 shadow"
+                      />
+                    )}
                   </div>
                 </div>
 
@@ -336,12 +362,11 @@ const CreateEvent = () => {
                       </>
                     ) : (
                       <>
-                        <FaPlus />
-                        Create Event
+                        <FaPlus /> Create Event
                       </>
                     )}
                   </button>
-                  
+
                   <button
                     type="button"
                     onClick={resetForm}
@@ -352,76 +377,28 @@ const CreateEvent = () => {
                         : "border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400"
                     }`}
                   >
-                    <FaUndo />
-                    Reset
+                    <FaUndo /> Reset
                   </button>
                 </div>
               </form>
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Tips Card */}
-            <div className={`rounded-2xl p-6 backdrop-blur-sm border ${
-              isDarkMode 
-                ? "bg-gray-800/50 border-gray-700" 
-                : "bg-white/80 border-white"
-            } shadow-2xl`}>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] rounded-xl flex items-center justify-center">
-                  <FaLightbulb className="text-white text-xl" />
-                </div>
-                <div>
-                  <h3 className={`text-xl font-bold ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                    Event Tips
-                  </h3>
-                  <p className={`text-sm ${isDarkMode ? "text-gray-400" : "text-gray-600"}`}>
-                    Create engaging events
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                {[
-                  { icon: FaCheckCircle, text: "Use clear, descriptive titles" },
-                  { icon: FaCheckCircle, text: "Provide detailed descriptions" },
-                  { icon: FaCheckCircle, text: "Choose relevant event types" },
-                  { icon: FaCheckCircle, text: "Set future dates only" },
-                  { icon: FaCheckCircle, text: "Add high-quality images" },
-                  { icon: FaCheckCircle, text: "Include exact location" }
-                ].map((tip, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <tip.icon className="text-green-500 flex-shrink-0" />
-                    <span className={`text-sm ${isDarkMode ? "text-gray-300" : "text-gray-700"}`}>
-                      {tip.text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Event Types Preview */}
-            <div className={`rounded-2xl p-6 backdrop-blur-sm border ${
-              isDarkMode 
-                ? "bg-gray-800/50 border-gray-700" 
-                : "bg-white/80 border-white"
-            } shadow-2xl`}>
-              <h3 className={`text-lg font-bold mb-4 ${isDarkMode ? "text-white" : "text-gray-800"}`}>
-                Popular Event Types
+          {/* Sidebar Tips */}
+          <div>
+            <div className={`p-6 rounded-2xl backdrop-blur-sm border ${
+              isDarkMode ? "bg-gray-800/50 border-gray-700 text-gray-300" : "bg-white/80 border-white text-gray-700"
+            } shadow-lg`}>
+              <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                <FaCheckCircle className="text-[#FF6B35]" /> Tips for a Great Event
               </h3>
-              <div className="grid grid-cols-2 gap-3">
-                {eventTypes.slice(0, 6).map((type) => (
-                  <div
-                    key={type.value}
-                    className={`p-3 rounded-lg text-center text-sm font-medium ${
-                      isDarkMode ? "bg-gray-700/50 text-white" : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {type.label}
-                  </div>
-                ))}
-              </div>
+              <ul className="space-y-2 list-disc list-inside">
+                <li>Provide clear and concise event details.</li>
+                <li>Choose a relevant and attractive thumbnail.</li>
+                <li>Set a future date and time for your event.</li>
+                <li>Pick an appropriate category for better visibility.</li>
+                <li>Double-check location and contact info.</li>
+              </ul>
             </div>
           </div>
         </div>

@@ -3,27 +3,29 @@ import { useParams, useNavigate } from "react-router";
 import toast, { Toaster } from "react-hot-toast";
 import { QRCodeCanvas } from "qrcode.react";
 import { useAuth } from "../Provider/AuthProvider";
-import { 
-  FaArrowLeft, 
-  FaUser, 
-  FaEnvelope, 
-  FaFilePdf, 
-  FaDownload, 
-  FaCalendarAlt, 
-  FaMapMarkerAlt 
+import { useTheme } from "../Provider/ThemeContext";
+import {
+  FaArrowLeft,
+  FaUser,
+  FaEnvelope,
+  FaFilePdf,
+  FaDownload,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 import { Document, Page, Text, View, StyleSheet, pdf, Image } from "@react-pdf/renderer";
 
 const EventPassCard = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const { isDarkMode } = useTheme();
   const navigate = useNavigate();
+
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generatingPDF, setGeneratingPDF] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState("");
 
-  // List of volunteering activities that require a pass
   const volunteerActivities = [
     "Cleanup",
     "Plantation",
@@ -32,10 +34,10 @@ const EventPassCard = () => {
     "Health Camp",
     "Skill Development",
     "Food Drive",
-    "Youth Empowerment"
+    "Youth Empowerment",
   ];
 
-  // Fetch event
+  // Fetch event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -61,21 +63,22 @@ const EventPassCard = () => {
     }
   }, [event, user]);
 
-  if (loading) return <Loading />;
-  if (!event) return <NotFound navigate={navigate} />;
+  if (loading) return <Loading isDarkMode={isDarkMode} />;
+  if (!event) return <NotFound navigate={navigate} isDarkMode={isDarkMode} />;
 
-  // Check if the event requires an event pass
   const isVolunteering = volunteerActivities.includes(event.eventType);
-  if (!isVolunteering) return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-      <h2 className="text-lg font-semibold text-gray-700">
-        No digital pass required for this activity
-      </h2>
-      <button onClick={() => navigate(-1)} className="mt-4 px-6 py-2 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg">
-        Go Back
-      </button>
-    </div>
-  );
+  if (!isVolunteering)
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center px-4 ${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-800"}`}>
+        <h2 className="text-lg font-semibold">No digital pass required for this activity</h2>
+        <button
+          onClick={() => navigate(-1)}
+          className="mt-4 px-6 py-2 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg"
+        >
+          Go Back
+        </button>
+      </div>
+    );
 
   const qrData = JSON.stringify({
     eventId: event._id,
@@ -84,18 +87,17 @@ const EventPassCard = () => {
     eventType: event.eventType,
     participantName: user.displayName,
     participantEmail: user.email,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   // PDF Styles
   const styles = StyleSheet.create({
     page: { flexDirection: "column", backgroundColor: "#fff", padding: 30, fontFamily: "Helvetica" },
     header: { backgroundColor: "#FF6B35", padding: 20, textAlign: "center", marginBottom: 20, borderRadius: 10 },
-    headerText: { color: "#fff", fontSize: 24, fontWeight: "bold", marginBottom: 5 },
+    headerText: { color: "#fff", fontSize: 24, fontWeight: "bold" },
     subHeader: { color: "#fff", fontSize: 12, opacity: 0.9 },
-    card: { border: "2px solid #E5E7EB", borderRadius: 15, padding: 25, marginBottom: 20 },
+    card: { border: "2px solid #E5E7EB", borderRadius: 15, padding: 25 },
     eventTitle: { fontSize: 20, fontWeight: "bold", textAlign: "center", marginBottom: 15, color: "#1F2937" },
-    infoSection: { marginBottom: 15 },
     infoItem: { flexDirection: "row", alignItems: "center", marginBottom: 8, fontSize: 12, color: "#6B7280" },
     userInfo: { backgroundColor: "#F9FAFB", padding: 15, borderRadius: 8, marginVertical: 15, border: "1px solid #E5E7EB" },
     userName: { fontSize: 14, fontWeight: "bold", color: "#1F2937", marginBottom: 4 },
@@ -109,23 +111,32 @@ const EventPassCard = () => {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>🎪 Event Pass</Text>
+          <Text style={styles.headerText}>Event Pass</Text>
           <Text style={styles.subHeader}>Digital Access Credential</Text>
         </View>
+
         <View style={styles.card}>
           <Text style={styles.eventTitle}>{event.title}</Text>
 
-          <View style={styles.infoSection}>
+          <View style={{ marginBottom: 15 }}>
             <View style={styles.infoItem}>
-              <Text>📅 {new Date(event.eventDate).toLocaleDateString()}</Text>
+              <Text> {new Date(event.eventDate).toLocaleDateString()}</Text>
             </View>
-            {event.location && <View style={styles.infoItem}><Text>📍 {event.location}</Text></View>}
-            {event.eventType && <View style={styles.infoItem}><Text>Type: {event.eventType}</Text></View>}
+            {event.location && (
+              <View style={styles.infoItem}>
+                <Text> {event.location}</Text>
+              </View>
+            )}
+            {event.eventType && (
+              <View style={styles.infoItem}>
+                <Text>Type: {event.eventType}</Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>👤 {user.displayName || "Guest"}</Text>
-            <Text style={styles.userEmail}>✉️ {user.email || "guest@example.com"}</Text>
+            <Text style={styles.userName}>{user.displayName || "Guest"}</Text>
+            <Text style={styles.userEmail}> {user.email || "guest@example.com"}</Text>
           </View>
 
           {qrDataUrl && (
@@ -179,48 +190,78 @@ const EventPassCard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className={`${isDarkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-800"} min-h-screen py-8 px-4`}>
       <Toaster />
 
       <div className="max-w-md mx-auto mb-6">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+        <button
+          onClick={() => navigate(-1)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg shadow-md transition-all duration-300 ${
+            isDarkMode ? "bg-gray-800 text-white hover:bg-gray-700" : "bg-white text-gray-700 hover:shadow-lg"
+          }`}
+        >
           <FaArrowLeft className="text-[#FF6B35]" /> Back to Event
         </button>
       </div>
 
-      <div className="max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-200">
-        <div className="bg-gradient-to-r from-[#FF6B35] to-[#F77F00] p-6 text-white text-center">
+      <div className={`max-w-md mx-auto rounded-3xl overflow-hidden border border-gray-200 shadow-2xl ${isDarkMode ? "bg-gray-800" : "bg-white"}`}>
+        <div className="bg-gradient-to-r from-[#FF6B35] to-[#F77F00] p-6 text-center">
           <h1 className="text-2xl font-bold">🎪 EventPass</h1>
           <p className="text-white/90 text-sm">Digital Access Credential</p>
         </div>
 
         <div className="p-6 text-center">
-          <h2 className="text-xl font-bold text-gray-800 mb-3">{event.title}</h2>
-          <div className="space-y-2 text-sm text-gray-600">
-            <div className="flex items-center justify-center gap-2"><FaCalendarAlt className="text-[#FF6B35]" /> {new Date(event.eventDate).toLocaleDateString()}</div>
-            {event.location && <div className="flex items-center justify-center gap-2"><FaMapMarkerAlt className="text-[#FF6B35]" /> {event.location}</div>}
-            {event.eventType && <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white text-xs rounded-full">{event.eventType}</div>}
+          <h2 className="text-xl font-bold mb-3">{event.title}</h2>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center justify-center gap-2">
+              <FaCalendarAlt className="text-[#FF6B35]" />
+              {new Date(event.eventDate).toLocaleDateString()}
+            </div>
+            {event.location && (
+              <div className="flex items-center justify-center gap-2">
+                <FaMapMarkerAlt className="text-[#FF6B35]" /> {event.location}
+              </div>
+            )}
+            {event.eventType && (
+              <div className="inline-block px-3 py-1 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white text-xs rounded-full">
+                {event.eventType}
+              </div>
+            )}
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-4 my-4 flex items-center gap-3">
+          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 my-4 flex items-center gap-3">
             <div className="w-12 h-12 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] rounded-full flex items-center justify-center">
-              {user.photoURL ? <img src={user.photoURL} alt={user.displayName} className="w-10 h-10 rounded-full object-cover"/> : <FaUser className="text-white text-lg"/>}
+              {user.photoURL ? (
+                <img src={user.photoURL} alt={user.displayName} className="w-10 h-10 rounded-full object-cover" />
+              ) : (
+                <FaUser className="text-white text-lg" />
+              )}
             </div>
             <div className="text-left">
-              <p className="font-semibold text-gray-800 text-sm">{user.displayName || "Guest"}</p>
-              <p className="text-xs text-gray-600 flex items-center gap-1 mt-1"><FaEnvelope className="text-[#FF6B35]" /> {user.email || "guest@example.com"}</p>
+              <p className="font-semibold text-gray-800 dark:text-white text-sm">{user.displayName || "Guest"}</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1 mt-1">
+                <FaEnvelope className="text-[#FF6B35]" /> {user.email || "guest@example.com"}
+              </p>
             </div>
           </div>
 
           <div className="mb-6 flex justify-center items-center">
-            <QRCodeCanvas value={qrData} size={180} bgColor="#fff" fgColor="#1f2937" level="H" />
+            <QRCodeCanvas value={qrData} size={180} bgColor={isDarkMode ? "#1f2937" : "#fff"} fgColor={isDarkMode ? "#fff" : "#1f2937"} level="H" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <button onClick={downloadPDF} disabled={generatingPDF} className="py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center gap-2 disabled:opacity-50">
+            <button
+              onClick={downloadPDF}
+              disabled={generatingPDF}
+              className="py-3 px-4 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center gap-2 disabled:opacity-50"
+            >
               {generatingPDF ? "Generating..." : <><FaFilePdf /> Download PDF</>}
             </button>
-            <button onClick={downloadQRCode} className="py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl flex items-center justify-center gap-2">
+            <button
+              onClick={downloadQRCode}
+              className="py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl flex items-center justify-center gap-2"
+            >
               <FaDownload /> QR Code Only
             </button>
           </div>
@@ -231,19 +272,24 @@ const EventPassCard = () => {
 };
 
 // Loading Skeleton
-const Loading = () => (
-  <div className="flex justify-center items-center min-h-screen">
+const Loading = ({ isDarkMode }) => (
+  <div className={`flex justify-center items-center min-h-screen ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}>
     <div className="animate-spin w-12 h-12 border-4 border-t-[#FF6B35] border-gray-200 rounded-full"></div>
-    <p className="mt-4 text-sm font-medium text-gray-700">Loading your event pass...</p>
+    <p className={`mt-4 text-sm font-medium ${isDarkMode ? "text-white" : "text-gray-700"}`}>Loading your event pass...</p>
   </div>
 );
 
 // Not Found Component
-const NotFound = ({ navigate }) => (
-  <div className="flex justify-center items-center min-h-screen text-center">
+const NotFound = ({ navigate, isDarkMode }) => (
+  <div className={`flex justify-center items-center min-h-screen text-center px-4 ${isDarkMode ? "text-white bg-gray-900" : "text-gray-800 bg-gray-50"}`}>
     <div>
       <p className="text-lg text-red-500 font-semibold mb-4">Event pass not found</p>
-      <button onClick={() => navigate(-1)} className="px-6 py-2 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg">Go Back</button>
+      <button
+        onClick={() => navigate(-1)}
+        className="px-6 py-2 bg-gradient-to-r from-[#FF6B35] to-[#F77F00] text-white rounded-lg"
+      >
+        Go Back
+      </button>
     </div>
   </div>
 );

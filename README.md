@@ -22,6 +22,24 @@ A community-driven frontend platform where users can view upcoming events, creat
 * Search and filter events
 * Toast/sweetalert notifications
 
+( Features new):
+1. Interactive Map
+
+Description: Displays event locations dynamically on a map interface. Users can click on markers to view event details.
+
+Purpose: Helps users easily locate events geographically.
+Countdown Timer
+
+2.Description: A live countdown timer for upcoming events, showing days, hours, minutes, and seconds remaining.
+
+Purpose: Builds excitement and urgency for users to participate in events.
+
+3.EventPassCard Feature:
+Generates a digital event pass for volunteers with a QR code for entry verification. Users can view event details, participant info, and download the pass as PDF or QR code. Dark/light mode support and interactive design enhance accessibility and user experience.
+
+4.Google Calendar Integration:
+Allows users to quickly add events to their Google Calendar with a single click. Automatically pre-fills event title, date, time, description, and location. Enhances user convenience and ensures no event is missed.
+
 ## Dependencies
 
 ```json
