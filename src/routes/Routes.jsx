@@ -14,6 +14,7 @@ import ManageEvent from "../pages/ManageEvent";
 import Contact from "../Components/Contact";
 import Resources from "../pages/Resources";
 import EventPassCard from "../pages/EventPassCard";
+import Faq from "../Components/Faq";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+       {
+        path: "faq",
+        element:<Faq></Faq>,
       },
       {
         path: "create-event",

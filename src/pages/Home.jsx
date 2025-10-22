@@ -8,7 +8,9 @@ import AOS from "aos";
 import { useEffect } from "react";
 import { useTheme } from "../Provider/ThemeContext";
 import { FaHandsHelping, FaCalendarAlt, FaStar, FaBullseye } from "react-icons/fa";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import Testimonial from "./Testimonial";
 
 const Home = () => {
   const { isDarkMode } = useTheme();
@@ -63,7 +65,7 @@ const Home = () => {
       className="text-center mb-12"
     >
       <h2 className="text-3xl sm:text-4xl font-semibold mb-2">
-        Why Choose RiseAndServe?
+        Why Choose Rise & <span className="text-[#F77F00]">Serve</span>?
       </h2>
       <p className={`text-base sm:text-lg max-w-2xl mx-auto ${
         isDarkMode ? "text-gray-300" : "text-gray-600"
@@ -171,7 +173,9 @@ const Home = () => {
 <PartnerSection></PartnerSection>
 </section>
 
-
+<section>
+  <Testimonial></Testimonial>
+</section>
 
       {/* ================= Newsletter Section ================= */}
       <section >

@@ -53,6 +53,9 @@ const Navbar = () => {
     { to: "/contact", label: "Contact" },
     { to: "/upcoming-events", label: "Upcoming Events" },
     { to: "/resources", label: "Resources" },
+     { to: "/faq", label: "Help" },
+
+
   ];
 
   const userLinks = [
@@ -185,7 +188,7 @@ const Navbar = () => {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 5, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute right-0 mt-2 w-60 rounded-2xl shadow-xl border z-50 ${
+                        className={`absolute right-0 mt-2 w-80 rounded-2xl shadow-xl border z-50 ${
                           isDarkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"
                         }`}
                       >

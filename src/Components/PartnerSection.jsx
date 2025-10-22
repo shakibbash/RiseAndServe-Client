@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useEffect } from "react";
 import AOS from "aos";
 import { useTheme } from "../Provider/ThemeContext"; 
@@ -27,33 +26,25 @@ const PartnerSection = () => {
     <section
       data-aos="fade-up"
       data-aos-once="false"
-      className={`py-16 px-6 ${
+      className={`py-16  max-w-8xl md:mx-auto  ${
         isDarkMode ? "bg-gray-800 text-gray-200" : "bg-white text-black"
       }`}
     >
       {/* Heading */}
-      <h2 className="text-3xl font-bold text-center mb-10">Our Partners</h2>
+      <h2 className="text-4xl font-bold text-center mb-10">Our <span className="text-[#FF6B35]">Partners</span></h2>
 
       {/* Partner Logos */}
       <div className="flex flex-wrap justify-center items-center gap-10">
         {partners.map((src, index) => (
-          <motion.img
+          <img
             key={index}
             src={src}
             alt={`Partner ${index + 1}`}
             data-aos="fade-up"
             data-aos-once="false"
-            className={`w-[180px] h-[180px] rounded-xl border-2 shadow-lg ${
+            className={`w-[250px] h-[250px] rounded-xl border-2 shadow-lg ${
               isDarkMode ? "border-yellow-400 shadow-gray-700" : "border-[#FF6B35] shadow-gray-300"
             }`}
-            whileHover={{ scale: 1.1 }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: index * 0.2,
-              duration: 0.5,
-              type: "spring",
-            }}
           />
         ))}
       </div>

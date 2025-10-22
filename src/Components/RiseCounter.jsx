@@ -40,8 +40,8 @@ const RiseCounter = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12" data-aos="fade-up">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-2">
-            Together We <span className="text-[#FF6B35]">Rise</span> & <span className="text-[#2A9D8F]">Serve</span>
+          <h2 className="text-4xl sm:text-3xl font-bold text-white mb-2">
+            Together We <span className="">Rise</span> & <span className="text-[#FF6B35]">Serve</span>
           </h2>
           <p className="text-sm sm:text-base text-white/80 max-w-2xl mx-auto leading-relaxed">
             Celebrating the collective effort of our volunteers and communities making a real difference.

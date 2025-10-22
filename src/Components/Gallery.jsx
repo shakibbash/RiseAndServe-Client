@@ -81,7 +81,7 @@ const Gallery = () => {
           : "bg-gradient-to-br from-slate-50 to-blue-50 text-gray-800"
       }`}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto md:px-10 ">
         {/* Header Section */}
         <div className="text-center mb-16">
           <div 
@@ -93,11 +93,11 @@ const Gallery = () => {
           </div>
           
           <h2
-            className="text-4xl md:text-5xl font-bold mb-6"
+            className="text-4xl md:text-4xl font-bold mb-6"
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            Our Community in <span className="text-[#FF6B35]">Action</span> 📸
+            Our Community in <span className="text-[#FF6B35]">Action</span> 
           </h2>
 
           <p
